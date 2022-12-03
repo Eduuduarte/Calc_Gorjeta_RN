@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Styled from 'styled-components/native';
+import { Text } from 'react-native';
 
 const Page = Styled.SafeAreaView`
   flex:1;
@@ -20,13 +20,17 @@ const Input = Styled.TextInput`
   padding: 10px;
 `
 
-const CalcButton = Styled.Button`
+const CalcButton = Styled.TouchableOpacity`
   margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #00FA9A;
+  border-radius: 10px;
 `;
 
 const ResultArea = Styled.View`
-  width: 100%;
-  margin-top: 30px;
+  width: 90%;
+  margin-top: 20px;
+  border-radius: 20px;
   background-color: #EEE;
   padding: 20px;
   justify-content: center;
@@ -48,9 +52,19 @@ const PctArea = Styled.View`
   margin: 20px;
 `;
 
-const PctItem = Styled.Button`
-
+const PctItem = Styled.TouchableOpacity`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  padding: 5px;
 `;
+
+const TextButton = Styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: ${props => props.color};
+`
 
 
 
@@ -64,10 +78,12 @@ export default function App() {
 
     if (nBill) {
       setTip(nBill * (pct/100));
-    } else {
-      alert('Digite o valor da conta')
     }
   }
+
+  useEffect(() => {
+    calc();
+  }, [pct])
 
   return (
     <Page>
@@ -79,16 +95,23 @@ export default function App() {
         onChangeText={n => setBill(n)}
       />
       <PctArea>
-        <PctItem title="5%" onPress={() => setPct(5)}/>
-        <PctItem title="10%" onPress={() => setPct(10)}/>
-        <PctItem title="15%" onPress={() => setPct(15)}/>
-        <PctItem title="20%" onPress={() => setPct(20)}/>
+        <PctItem onPress={() => setPct(5)}>
+          <TextButton color={pct === 5 ? '#4B0082' : '#00FA9A'}>5%</TextButton>
+        </PctItem>
+        <PctItem onPress={() => setPct(10)}>
+          <TextButton color={pct === 10 ? '#4B0082' : '#00FA9A'}>10%</TextButton>
+        </PctItem>
+        <PctItem onPress={() => setPct(15)}>
+          <TextButton color={pct === 15 ? '#4B0082' : '#00FA9A'}>15%</TextButton>
+        </PctItem>
+        <PctItem onPress={() => setPct(20)}>
+          <TextButton color={pct === 20 ? '#4B0082' : '#00FA9A'}>20%</TextButton>
+        </PctItem>
       </PctArea>
 
-      <CalcButton
-        title={`Calcular ${pct}%`}
-        onPress={calc}
-      />
+      <CalcButton onPress={calc}>
+        <TextButton color="#00FA9A">Calcular {pct}%</TextButton>
+      </CalcButton>
       {tip > 0 &&
         <ResultArea>
           <ResultItemTitle>Valor da Conta</ResultItemTitle>
